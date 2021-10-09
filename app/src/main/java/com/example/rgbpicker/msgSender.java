@@ -70,16 +70,14 @@ public class msgSender extends AsyncTask<String,Void,Void> {
         String msg1 = "voids[0]";
         try {
 
-            s = new Socket("192.168.56.1", 8080);
+            Socket s = new Socket("192.168.1.104", 9001);
 
-            dos out = s.getOutputStream();
+            OutputStream out = s.getOutputStream();
+
             PrintWriter output = new PrintWriter(out);
-            //pw = new PrintWriter(s.getOutputStream());
-            pw.write(msg1);
 
-            pw.close();
-            s.close();
-
+            output.println(msg);
+            output.flush();
             Socket socket = new Socket("192.168.56.1", 9000);
 
             OutputStream out = socket.getOutputStream();

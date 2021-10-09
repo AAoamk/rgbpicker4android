@@ -18,26 +18,33 @@
         android:id="@+id/displayValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HEX: \nRGB:"
+        android:text="SETCOLOR"
+        android:layout_gravity="center"
+        android:textSize="24sp"/>
+    <TextView
+        android:id="@+id/modeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DEFAULT MODE"
         android:layout_gravity="center"
         android:textSize="24sp"/>
     <View
         android:id="@+id/displayColours"
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
+    <Spinner
+        android:id="@+id/plansList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="send"
         android:text="Send settings" />
-    <TextView
-        android:id="@+id/StatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="status goes here"
-        android:layout_gravity="center"
-        android:textSize="24sp"/>
+
+
+
 
 
 </LinearLayout>
