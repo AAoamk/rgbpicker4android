@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -27,6 +29,22 @@ public class MainActivity extends AppCompatActivity {
     Switch modeswitch;
     Bitmap bitmap;
     Spinner mainSpinner;
+
+    private int getColor(float x, float y, View v)
+    {
+        if (x < 0 || y < 0 || x > (float) v.getWidth() || y > (float) v.getHeight())
+        {
+            return 0; //Invalid, return 0
+        } else {
+            //Convert touched x, y on View to on Bitmap
+            int xBm = (int) (x * (bitmap.getWidth() / (double) v.getWidth()));
+            int yBm = (int) (y * (bitmap.getHeight() / (double) v.getHeight()));
+
+            return bitmap.getPixel(xBm, yBm);
+        }
+    }
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
         handler.postDelayed(r, 500);
         imgView.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
+                if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
                     bitmap = imgView.getDrawingCache();
-                    int pixels = bitmap.getPixel((int)event.getX(), (int)event.getY());
+                    int pixels = getColor(event.getX(), event.getY(), v);
                     int r = Color.red(pixels);
                     int g = Color.green(pixels);
                     int b = Color.blue(pixels);
-                    String hex = "#"+ Integer.toHexString(pixels);
-                    mColorViews.setBackgroundColor(Color.rgb(r,g,b));
-                    mColorValues.setText("SETCOLOR:"+r+","+g+","+b+"");
+                    String hex = "#" + Integer.toHexString(pixels);
+                    mColorViews.setBackgroundColor(Color.rgb(r, g, b));
+                    mColorValues.setText("SETCOLOR:" + r + "," + g + "," + b + "");
                     Intent intent = new Intent(getApplicationContext(), msgSender.class);
                 }
                 return true;
