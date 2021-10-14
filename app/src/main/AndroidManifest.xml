@@ -12,12 +12,17 @@
         android:theme="@style/Theme.Rgbpicker">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:noHistory="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ConfigActivity"
+            android:noHistory="true">
         </activity>
     </application>
 

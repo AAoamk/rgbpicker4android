@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -12,10 +11,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -25,10 +23,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgView;
     TextView mColorValues;
     View mColorViews;
-    TextView modeStatus;
-    Switch modeswitch;
     Bitmap bitmap;
     Spinner mainSpinner;
+    public static String serverIP = "192.168.1.113";
 
     private int getColor(float x, float y, View v)
     {
@@ -39,37 +36,37 @@ public class MainActivity extends AppCompatActivity {
             //Convert touched x, y on View to on Bitmap
             int xBm = (int) (x * (bitmap.getWidth() / (double) v.getWidth()));
             int yBm = (int) (y * (bitmap.getHeight() / (double) v.getHeight()));
-
             return bitmap.getPixel(xBm, yBm);
         }
     }
 
+    protected void populateModeList()
+    {
+        mainSpinner = (Spinner)findViewById(R.id.plansList);
+        List<String> modes = new ArrayList<String>();
+        modes.add("SINGLE COLOR");
+        modes.add("PIXEL BY PIXEL");
+        modes.add("RAINBOW");
+        modes.add("NO LIGHTS");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, modes);
+        mainSpinner.setAdapter(dataAdapter);
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         imgView = findViewById(R.id.color);
         mColorValues = findViewById(R.id.displayValues);
         mColorViews = findViewById(R.id.displayColours);
-        modeStatus = findViewById(R.id.modeText);
         imgView.setDrawingCacheEnabled(true);
         imgView.buildDrawingCache(true);
-        //modeswitch = findViewById(R.id.modeswitch);
-        populatePlansList();
-        Handler handler = new Handler();
-        Runnable r=new Runnable() {
-            public void run() {
-                String spinnerText = (mainSpinner.getSelectedItem().toString());
-                modeStatus.setText(spinnerText);
-                handler.postDelayed(this, 200);
-            }
-        };
 
-        handler.postDelayed(r, 500);
+        populateModeList();
+
         imgView.setOnTouchListener(new View.OnTouchListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -80,26 +77,35 @@ public class MainActivity extends AppCompatActivity {
                     int b = Color.blue(pixels);
                     String hex = "#" + Integer.toHexString(pixels);
                     mColorViews.setBackgroundColor(Color.rgb(r, g, b));
-                    mColorValues.setText("SETCOLOR:" + r + "," + g + "," + b + "");
-                    Intent intent = new Intent(getApplicationContext(), msgSender.class);
+                    String newText = "SETCOLOR:" + r + "," + g + "," + b + "";
+                    mColorValues.setText(newText);
+                    Intent intent = new Intent(getApplicationContext(), MessageSender.class);
                 }
                 return true;
             }
         });
     }
-    public void send(View v) {
-        msgSender messageSent = new msgSender();
-        String msg = (mColorValues.getText().toString()+","+ modeStatus.getText().toString());
+
+    public void onClickSend(View v)
+    {
+        MessageSender msgSender = new MessageSender();
+        if(!msgSender.hasConnection())
+        {
+            Toast.makeText(getApplicationContext(), "Connection failed!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String msg = (mColorValues.getText().toString()+","+ mainSpinner.getSelectedItem().toString());
         msgSender.sendMessage(msg);
     }
-    protected void populatePlansList()
-    {
-        mainSpinner = (Spinner)findViewById(R.id.plansList);
 
-        List<String> categories = new ArrayList<String>();
-        categories.add("DEFAULT MODE");
-        categories.add("WAVE MODE");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        mainSpinner.setAdapter(dataAdapter);
+    public void onClickConfig(View view)
+    {
+        Intent i = new Intent(MainActivity.this, ConfigActivity.class);
+        startActivity(i);
+    }
+
+    public void onBackPressed()
+    {
+        finishAffinity();
     }
 }

@@ -1,48 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/color"
-        android:layout_width="wrap_content"
-        android:layout_height="280dp"
-        android:src="@drawable/color" />
+        android:layout_width="411dp"
+        android:layout_height="362dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/displayValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SETCOLOR"
-        android:layout_gravity="center"
-        android:textSize="24sp"/>
-    <TextView
-        android:id="@+id/modeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DEFAULT MODE"
-        android:layout_gravity="center"
-        android:textSize="24sp"/>
-    <View
-        android:id="@+id/displayColours"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"/>
+        android:layout_marginTop="10dp"
+        android:text="SETCOLOR:255,255,255"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color" />
 
     <Spinner
         android:id="@+id/plansList"
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        android:spinnerMode="dialog" />
+        android:layout_width="381dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:spinnerMode="dialog"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayColours"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <View
+        android:id="@+id/displayColours"
+        android:layout_width="384dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:fadingEdge="horizontal|vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayValues" />
 
     <Button
-        android:layout_width="match_parent"
+        android:id="@+id/button"
+        android:layout_width="305dp"
         android:layout_height="75dp"
-        android:onClick="send"
-        android:text="Send settings" />
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#2196F3"
+        android:onClick="onClickSend"
+        android:text="Send settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#2196F3"
+        android:clickable="true"
+        android:cropToPadding="false"
+        android:onClick="onClickConfig"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_preferences"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
