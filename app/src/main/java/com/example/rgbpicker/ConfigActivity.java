@@ -52,10 +52,4 @@ public class ConfigActivity extends AppCompatActivity
     {
         changeStatus();
     }
-
-    @Override
-    public void onBackPressed() {
-        Intent i = new Intent(ConfigActivity.this, MainActivity.class);
-        startActivity(i);
-    }
 }
